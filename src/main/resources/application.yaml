@@ -2,7 +2,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Africa/Cairo
-    default-property-inclusion: non_null
+    default-property-inclusion: non_empty
     serialization:
       write-empty-json-arrays: false
       write-null-map-values: false

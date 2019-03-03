@@ -2,17 +2,19 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.3.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
+
     <groupId>com.gmail.bishoybasily</groupId>
     <artifactId>demo-countries</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>demo-countries</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Demo project for flairstech</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -22,12 +24,11 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
@@ -37,16 +38,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -57,6 +53,12 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -71,7 +73,7 @@
     <profiles>
         <profile>
 
-            <id>world-db</id>
+            <id>include-docker</id>
 
             <build>
                 <plugins>
@@ -88,9 +90,18 @@
                                 <configuration>
                                     <target>
 
-                                        <exec executable="free">
-                                            <arg value="-m"/>
+                                        <exec executable="docker">
+                                            <arg value="run"/>
+                                            <arg value="--rm"/>
+                                            <arg value="-d"/>
+                                            <arg value="-p"/>
+                                            <arg value="5432:5432"/>
+                                            <arg value="--name=postgres-world-db"/>
+                                            <arg value="ghusta/postgres-world-db"/>
                                         </exec>
+
+                                        <!--sleep a few seconds until the db boots up-->
+                                        <sleep seconds="3"/>
 
                                     </target>
 
