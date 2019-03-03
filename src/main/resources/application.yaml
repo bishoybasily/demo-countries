@@ -1,0 +1,71 @@
+spring:
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Africa/Cairo
+    default-property-inclusion: non_null
+    serialization:
+      write-empty-json-arrays: false
+      write-null-map-values: false
+      fail-on-empty-beans: false
+      write-dates-as-timestamps: false
+    deserialization:
+      fail-on-unknown-properties: false
+    parser:
+      allow-non-numeric-numbers: true
+    mapper:
+      default-view-inclusion: false
+
+---
+spring:
+  profiles: test
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:world-db;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    hikari:
+      connection-test-query: SELECT 1
+
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: false
+        show_sql: true
+        globally_quoted_ids: true
+        enable_lazy_load_no_trans: true
+        generate_statistics: false
+        hbm2ddl:
+          auto: update
+        temp:
+          use_jdbc_metadata_defaults: false # reference https://vkuzel.com/spring-boot-jpa-hibernate-atomikos-postgresql-exception
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect # reference https://vkuzel.com/spring-boot-jpa-hibernate-atomikos-postgresql-exception
+
+---
+spring:
+  profiles: local
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:127.0.0.1}/${DB_NAME:world-db}
+    username: ${DB_USER:world}
+    password: ${DB_PASSWORD:world123}
+    hikari:
+      connection-test-query: SELECT 1
+
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        format_sql: false
+        show_sql: true
+        globally_quoted_ids: true
+        enable_lazy_load_no_trans: true
+        generate_statistics: false
+        hbm2ddl:
+          auto: update
+        temp:
+          use_jdbc_metadata_defaults: false # reference https://vkuzel.com/spring-boot-jpa-hibernate-atomikos-postgresql-exception
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect # reference https://vkuzel.com/spring-boot-jpa-hibernate-atomikos-postgresql-exception
