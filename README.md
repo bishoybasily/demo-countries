@@ -2,4 +2,8 @@
 mvn clean compile package spring-boot:run -Pinclude-docker -Dspring.profiles.active=local -DskipTests
 
 # Run the tests 
-mvn clean compile test 
+mvn clean compile test
+
+# Endpoints
+* GET /api/countries
+* GET /api/countries/{code}
